@@ -93,7 +93,7 @@ Una vez que el proyecto está compilado, puedes ejecutar el servidor con el sigu
 make run
 ```
 
-##Limpieza de Archivos
+## Limpieza de Archivos
 
 Si deseas limpiar los archivos compilados y eliminar el contenido del directorio de construcción (bin), ejecuta:
 
