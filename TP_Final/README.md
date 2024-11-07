@@ -69,13 +69,14 @@ $
 Este proyecto presenta un servidor TCP básico implementado en C, organizado por directorios para facilitar la gestión del código.
 
 ## Estructura del Proyecto
+```
 mi_proyecto/
 ├── src/            # Archivos fuente (.c)
 ├── inc/            # Archivos de encabezado (.h)
 ├── bin/            # Ejecutables generados
 ├── Makefile        # Archivo de construcción
 └── README.md       # Este archivo
-
+```
 ## Compilación
 
 Para compilar el proyecto, asegúrate de tener instalado `gcc` y `make`. Luego, simplemente ejecuta el siguiente comando en la terminal dentro de la carpeta del proyecto:
