@@ -17,13 +17,13 @@ El servidor debe:
 
 Los comandos que acepta el servidor son:
 
-* SET <clave> <valor>\n:
+* SET < clave > < valor >\n:
   * Se crea en el servidor un archivo llamado <clave> con el contenido indicado en <valor> (sin incluir el \n).
   * Se responde al cliente OK\n.
-* GET <clave>:
+* GET < clave >\n:
   * Si existe el archivo correspondiente, se responde al cliente con: OK\n<valor>\n (es decir, una línea de texto que dice OK y otra que contiene el contenido del archivo).
  * Si no existe, se responde con NOTFOUND\n
-* DEL <clave>:
+* DEL < clave >\n:
   * Si existe la el archivo correspondiente, se elimina.
   * Tanto si existe como no, se responde OK\n.
 Ante cualquier caso excepcional, informar la causa y finalizar el proceso con código de error.
