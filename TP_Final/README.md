@@ -70,7 +70,7 @@ Este proyecto presenta un servidor TCP básico implementado en C, organizado por
 
 ## Estructura del Proyecto
 ```
-mi_proyecto/
+TP_Final/
 ├── src/            # Archivos fuente (.c)
 ├── inc/            # Archivos de encabezado (.h)
 ├── bin/            # Ejecutables generados
