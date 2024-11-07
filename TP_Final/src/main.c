@@ -3,7 +3,7 @@
 
 
 int main() {
-  printf("[INFO] Hola, mundo!\n");
+  printf("[INFO] Hello World!\n");
 
   int servSock = setupTCPServerSocket(TCP_PORT);
   if (servSock < 0 )

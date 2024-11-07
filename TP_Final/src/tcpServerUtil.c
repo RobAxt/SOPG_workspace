@@ -1,5 +1,7 @@
 #include "tcpServerUtil.h"
 
+static int writeResponse(int clntSocket, char* data);
+
 int setupTCPServerSocket(const int service)
 {
   struct sockaddr_in serverAddr = {0};
@@ -38,7 +40,7 @@ int acceptTCPConnection(int servSock)
   struct sockaddr_in clientAddr;
   int activeSocket;
   
-  printf("[INFO] Server: esperando una conexion...\n");
+  printf("[INFO] Waiting a connection...\n");
   if((activeSocket = accept(servSock, (struct sockaddr *)&clientAddr, &addrLen)) < 0)
   {
    perror("[WARN] accept");
@@ -47,7 +49,7 @@ int acceptTCPConnection(int servSock)
 
   char ipClient[32];
   inet_ntop(AF_INET, &(clientAddr.sin_addr), ipClient, sizeof(ipClient));
-  printf("[INFO] Server: conexion desde:  %s\n", ipClient);
+  printf("[INFO] Connection from:  %s\n", ipClient);
   
   return activeSocket;
 }
@@ -56,7 +58,7 @@ void handleTCPClient(int clntSocket)
 {
   char buffer[BUFSIZE];
   char responseBuffer[BUFSIZE]; 
-  int result;
+  
   ssize_t numBytesRcvd = recv(clntSocket, buffer, BUFSIZE, 0);
   if (numBytesRcvd < 0)
   {
@@ -64,20 +66,37 @@ void handleTCPClient(int clntSocket)
     close(clntSocket);
     return; //RECV_ERROR
   }
-
   buffer[numBytesRcvd] = '\0';   
-  result = handleCommand(buffer, responseBuffer);
+
+  int result = handleCommand(buffer, responseBuffer);
   
   switch(result)
   {
     case OK:
+      writeResponse(clntSocket, SUCCESS_RESPONSE);
+      break;
     case OK_RESPONSE:
+      writeResponse(clntSocket, SUCCESS_RESPONSE);
+      writeResponse(clntSocket, responseBuffer);
       break;
     case NOT_FOUND:
+      writeResponse(clntSocket, FAILURE_RESPONSE);
       break;
     default:
-  } 
-  
-  close(clntSocket);
-  
+      fprintf(stderr,"[ERROR] Something went wrong\n");
+  }  
+
+  close(clntSocket); 
+}
+
+static int writeResponse(int clntSocket, char* data) 
+{
+  printf("[INFO] Message to Send: %s", data);
+  ssize_t numBytesSent = write(clntSocket, data, strlen(data));
+  if (numBytesSent < 0)
+  {
+    perror("[ERROR] Write");
+    return SENT_ERROR;
+  }
+  return WRITE_SUCCESS;
 }

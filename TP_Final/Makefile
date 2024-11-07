@@ -18,12 +18,12 @@ CFLAGS = -Wall -I$(INCLUDE_DIR)
 $(BUILD_DIR)/$(TARGET): $(OBJ_FILES)
 	@mkdir -p $(BUILD_DIR)
 	$(CC) -o $@ $^
-	@echo "Ejecutable $@ creado."
+	@echo "Executable $@ created."
 
 # Regla para compilar cada archivo .c a .o
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
-	@echo "Compilado $< a $@"
+	@echo "Compiled $< to $@"
 
 # Crear el directorio de build si no existe
 $(BUILD_DIR):
@@ -32,11 +32,11 @@ $(BUILD_DIR):
 # Limpieza de archivos compilados
 clean:
 	rm -rf $(BUILD_DIR)/*
-	@echo "Archivos en $(BUILD_DIR) eliminados."
+	@echo "Archives in $(BUILD_DIR) deleted."
 
 # Ejecución del programa
 run: $(BUILD_DIR)/$(TARGET)
-	@echo "Ejecutando $<..."
+	@echo "Executing $<..."
 	@./$(BUILD_DIR)/$(TARGET)
 
 # PHONY para evitar conflictos con archivos llamados igual
