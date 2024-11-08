@@ -5,8 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
-
-
+#include <sys/stat.h>
 #include "tcpServerUtil.h"
 
 #define DELIMS       " \n\r"

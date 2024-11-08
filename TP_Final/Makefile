@@ -12,7 +12,7 @@ OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRC_FILES))
 
 # Compilador y flags
 CC = gcc
-CFLAGS = -Wall -I$(INCLUDE_DIR)
+CFLAGS = -Wall -std=c99 -pedantic -I$(INCLUDE_DIR)
 
 # Regla para compilar el ejecutable final
 $(BUILD_DIR)/$(TARGET): $(OBJ_FILES)

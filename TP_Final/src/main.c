@@ -1,7 +1,5 @@
 #include "main.h"
 
-
-
 int main() {
   printf("[INFO] Hello World!\n");
 

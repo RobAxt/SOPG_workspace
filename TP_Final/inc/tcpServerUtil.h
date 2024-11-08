@@ -25,13 +25,8 @@
 #define SUCCESS_RESPONSE  "OK\n"
 #define FAILURE_RESPONSE  "NOTFOUND\n"
 
-// Create, bind, and listen a new TCP server socket
 int setupTCPServerSocket(const int service);
-
-// Accept a new TCP connection on a server socket
 int acceptTCPConnection(int servSock);
-
-// Handle new TCP client
 void handleTCPClient(int clntSocket);
 
 #endif // TCP_SERVER_UTIL_H

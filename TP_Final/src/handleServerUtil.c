@@ -11,6 +11,7 @@ int handleCommand(char * cmnd, char* resp)
   char *token = strtok(cmnd, DELIMS);
   int cmndAction = 0;
   int status = 0;  
+
   if(token != NULL)
   {
     printf("[INFO] Command received: %s\n", token);
@@ -135,5 +136,3 @@ static int deleteFile(char* key)
   fprintf(stderr,"[ERROR] Bad Command\n");
   return ERROR;
 }
-
-
