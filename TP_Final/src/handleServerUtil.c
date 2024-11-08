@@ -1,72 +1,71 @@
 #include "handleServerUtil.h"
 
-static int readFile(char* key, char* value);
-static int writeFile(char* key, char* value);
-static int deleteFile(char* key);
+typedef int (*action_t)(char* key, char* value, char* response);
 
+static int readFile(char* key, char* value, char* response);
+static int writeFile(char* key, char* value, char* response);
+static int deleteFile(char* key, char* value, char* response);
+
+typedef struct
+{
+  char*   command;
+  action_t action;
+} command_t;
+
+static command_t commands[] = {
+                                {"SET", writeFile },
+                                {"GET", readFile  },
+                                {"DEL", deleteFile},
+                              };
+                       
+static const int MAX_CMND = sizeof(commands)/sizeof(command_t);
+                       
 int handleCommand(char * cmnd, char* resp)
 {
   printf("[INFO] Message Received: %s", cmnd);
   
   char *token = strtok(cmnd, DELIMS);
-  int cmndAction = 0;
-  int status = 0;  
+  char *key   = strtok(NULL, DELIMS);
+  char *value = strtok(NULL, DELIMS);
+  int cmndIdx = 0;
+  int status = ERROR;  
 
   if(token != NULL)
   {
     printf("[INFO] Command received: %s\n", token);
-    if( strcmp(token, GET_CMND) == 0)
-      cmndAction = GET_CMND_IDX;
-    if( strcmp(token, SET_CMND) == 0)
-      cmndAction = SET_CMND_IDX;
-    if( strcmp(token, DEL_CMND) == 0)
-      cmndAction = DEL_CMND_IDX;
-     
-    switch(cmndAction)
+    
+    while(cmndIdx < MAX_CMND)
     {
-      case GET_CMND_IDX: 
-      {
-        char *key = strtok(NULL, DELIMS);
-        printf("[INFO] Key received: %s\n", key);
-        status = readFile(key, resp);
+      if(strcmp(token, commands[cmndIdx].command) == 0)
         break;
-      }
-      case SET_CMND_IDX:
-      {
-        char *key = strtok(NULL, DELIMS);
-        char *value = strtok(NULL, DELIMS);
-        printf("[INFO] Key-Value received: %s - %s\n", key, value);
-        status = writeFile(key, value);
-        break;
-      }
-      case DEL_CMND_IDX:
-      {
-        char *key = strtok(NULL, DELIMS);
-        printf("[INFO] Key received: %s\n", key);
-        status = deleteFile(key);
-        break;
-      }
-      default:
-        fprintf(stderr,"[ERROR] Bad Command\n");
-        return ERROR;
+      cmndIdx++;
+    }
+    
+    if(cmndIdx < MAX_CMND)
+      status = commands[cmndIdx].action(key, value, resp);
+    else
+    {
+      fprintf(stderr,"[ERROR] Command Not Found\n");
+      status = ERROR;
     }
   }
   else
   {
-    fprintf(stderr,"[ERROR] Bad Command\n");
-    return ERROR;
+    fprintf(stderr,"[ERROR] Emtpy Command\n");
+    status = ERROR;
   }
   return status;
 }
 
-
-static int readFile(char* key, char* value)
+static int readFile(char* key, char* value, char* response)
 {
-  if( key == NULL || value == NULL)
+  if( key == NULL || response == NULL)
   {
-    fprintf(stderr,"[ERROR] Bad Command\n");  
+    fprintf(stderr,"[ERROR] Bad Command Arguments\n");  
     return ERROR;
   }
+  
+  printf("[INFO] Key received: %s\n", key);
   
   int fd = open(key, O_RDONLY);
   if (fd <= 0)
@@ -75,7 +74,7 @@ static int readFile(char* key, char* value)
    return NOT_FOUND;
   }
 
-  ssize_t bytesRead = read(fd, value, BUFSIZE);
+  ssize_t bytesRead = read(fd, response, BUFSIZE-2);
   
   if(bytesRead < 0)
   {
@@ -84,20 +83,25 @@ static int readFile(char* key, char* value)
     return OK;
   }
   
-  value[bytesRead] = '\n';
-  value[bytesRead+1] = '\0';  
+  if(bytesRead < BUFSIZE)
+  {
+    response[bytesRead] = '\n';
+    response[bytesRead+1] = '\0';
+  }
   
   close(fd);
   return OK_RESPONSE;  
 }
 
-static int writeFile(char* key, char* value)
+static int writeFile(char* key, char* value, char* response)
 {
   if( key == NULL || value == NULL)
   {
-    fprintf(stderr,"[ERROR] Bad Command\n");  
+    fprintf(stderr,"[ERROR] Bad Command Arguments\n");  
     return ERROR;
   }
+  
+  printf("[INFO] Key-Value received: %s - %s\n", key, value);
   
   int fd = open(key, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
   if (fd <= 0)
@@ -118,10 +122,12 @@ static int writeFile(char* key, char* value)
   return OK;
 }
 
-static int deleteFile(char* key)
+static int deleteFile(char* key, char* value, char* response)
 {
   if(key != NULL)
   {
+    printf("[INFO] Key received: %s\n", key);
+    
     if(remove(key) == 0)
     {
       printf("[INFO] Deleted successfully\n");
@@ -129,10 +135,10 @@ static int deleteFile(char* key)
     }
     else
     {
-     fprintf(stderr,"[ERROR] Unable to delete the file\n");
+     perror("[ERROR] Unable to delete the file");
      return OK;
     }
   }
-  fprintf(stderr,"[ERROR] Bad Command\n");
+  fprintf(stderr,"[ERROR] Bad Command Arguments\n");
   return ERROR;
 }

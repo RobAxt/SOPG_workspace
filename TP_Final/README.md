@@ -100,3 +100,32 @@ Si deseas limpiar los archivos compilados y eliminar el contenido del directorio
 ```bash
 make clean
 ```
+
+## Funcionamiento del Servidor
+
+En funcionamiento normal el servidor responde de la siguiente manera:
+
+```
+[INFO] Hello World!
+[INFO] Waiting a connection...
+[INFO] Connection from:  127.0.0.1
+[INFO] Message Received: SET hola mundo
+[INFO] Command received: SET
+[INFO] Key-Value received: hola - mundo
+[INFO] Message to Send: OK
+[INFO] Waiting a connection...
+[INFO] Connection from:  127.0.0.1
+[INFO] Message Received: GET hola
+[INFO] Command received: GET
+[INFO] Key received: hola
+[INFO] Message to Send: OK
+[INFO] Message to Send: mundo
+[INFO] Waiting a connection...
+[INFO] Connection from:  127.0.0.1
+[INFO] Message Received: DEL hola
+[INFO] Command received: DEL
+[INFO] Key received: hola
+[INFO] Deleted successfully
+[INFO] Message to Send: OK
+[INFO] Waiting a connection...
+```

@@ -7,7 +7,7 @@ int main() {
   if (servSock < 0 )
     return EXIT_FAILURE;
 
-  while(TRUE)
+  while(true)
   {
     int clntSock = acceptTCPConnection(servSock);
     if (clntSock < 0)
