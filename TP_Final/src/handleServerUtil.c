@@ -37,13 +37,14 @@ int handleCommand(char * cmnd, char* resp)
     while(cmndIdx < MAX_CMND)
     {
       if(strcmp(token, commands[cmndIdx].command) == 0)
+      {
+        status = commands[cmndIdx].action(key, value, resp);
         break;
+      }
       cmndIdx++;
     }
     
-    if(cmndIdx < MAX_CMND)
-      status = commands[cmndIdx].action(key, value, resp);
-    else
+    if(cmndIdx == MAX_CMND)
     {
       fprintf(stderr,"[ERROR] Command Not Found\n");
       status = ERROR;

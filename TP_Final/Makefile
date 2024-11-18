@@ -10,6 +10,10 @@ BUILD_DIR = bin
 SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRC_FILES))
 
+#.DEFAULT_GOAL := all
+
+-include $(patsubst %.o,%.d,$(OBJ_FILES))
+
 # Compilador y flags
 CC = gcc
 CFLAGS = -Wall -std=c99 -pedantic -I$(INCLUDE_DIR)
@@ -31,13 +35,18 @@ $(BUILD_DIR):
 
 # Limpieza de archivos compilados
 clean:
-	rm -rf $(BUILD_DIR)/*
+	@rm -rf $(BUILD_DIR)/*
 	@echo "Archives in $(BUILD_DIR) deleted."
 
 # Ejecución del programa
 run: $(BUILD_DIR)/$(TARGET)
 	@echo "Executing $<..."
 	@./$(BUILD_DIR)/$(TARGET)
+
+# Verificion usando Valgrind
+debug: $(BUILD_DIR)/$(TARGET)
+	@echo "Debugging $<..."
+	@valgrind --leak-check=full --show-leak-kinds=all -s ./$(BUILD_DIR)/$(TARGET)
 
 # PHONY para evitar conflictos con archivos llamados igual
 .PHONY: clean run

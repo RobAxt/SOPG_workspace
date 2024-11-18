@@ -18,10 +18,10 @@ El servidor debe:
 Los comandos que acepta el servidor son:
 
 * SET &lt;clave&gt; &lt;valor&gt;\n:
-  * Se crea en el servidor un archivo llamado <clave> con el contenido indicado en <valor> (sin incluir el \n).
+  * Se crea en el servidor un archivo llamado &lt;clave> con el contenido indicado en &lt;valor&gt; (sin incluir el \n).
   * Se responde al cliente OK\n.
 * GET &lt;clave&gt;\n:
-  * Si existe el archivo correspondiente, se responde al cliente con: OK\n<valor>\n (es decir, una línea de texto que dice OK y otra que contiene el contenido del archivo).
+  * Si existe el archivo correspondiente, se responde al cliente con: OK\n&lt;valor&gt;\n (es decir, una línea de texto que dice OK y otra que contiene el contenido del archivo).
  * Si no existe, se responde con NOTFOUND\n
 * DEL &lt;clave&gt;\n:
   * Si existe la el archivo correspondiente, se elimina.
