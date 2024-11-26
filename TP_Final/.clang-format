@@ -1,16 +1,22 @@
-BasedOnStyle: LLVM
+BasedOnStyle: Google
 UseTab: Never
 IndentWidth: 2
 TabWidth: 2
-BreakBeforeBraces: Attach
+BreakBeforeBraces: Allman
 AllowShortBlocksOnASingleLine: false
 AllowShortIfStatementsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: false
 AllowShortLambdasOnASingleLine: false
-SortIncludes: false
-IndentCaseLabels: false
+SortIncludes: true
+IndentCaseLabels: true
+SpaceBeforeCaseColon: false
 ColumnLimit: 100
 AccessModifierOffset: -4
 FixNamespaceComments: false
 PointerAlignment: Middle
 AlignConsecutiveMacros: AcrossEmptyLines
+SpaceBeforeParens: Custom
+SpaceBeforeParensOptions:
+  AfterControlStatements: false
+  AfterFunctionDefinitionName: false
+  AfterFunctionDeclarationName: false

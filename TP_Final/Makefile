@@ -48,5 +48,17 @@ debug: $(BUILD_DIR)/$(TARGET)
 	@echo "Debugging $<..."
 	@valgrind --leak-check=full --show-leak-kinds=all -s ./$(BUILD_DIR)/$(TARGET)
 
+doc:
+	@mkdir -p $(OUT_DIR)/doc
+	@doxygen doxyfile
+
+check:
+	@echo Verificando el formato $<
+	@clang-format -style=file -dry-run $(SRC_FILES)
+
+format:
+	@echo Formateando $<
+	@clang-format -i $(SRC_FILES)
+
 # PHONY para evitar conflictos con archivos llamados igual
 .PHONY: clean run
